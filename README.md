@@ -24,4 +24,4 @@ Framework preset: `None`. Build command: vazio. Build output directory: `public`
 
 Nome: Davi Cunha Mayer Vanelli
 RA: 2026108175
-URL: https://
+URL: https://2bim-avalia1-f3r.pages.dev
