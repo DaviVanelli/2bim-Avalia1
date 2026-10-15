@@ -1,27 +1,44 @@
 # Desenho Assinado
 
-Página que recebe um número inteiro entre 1 e 100 e devolve uma figura em SVG, assinada com um e-mail.
+Aplicação que recebe um número inteiro entre 1 e 100 e gera um SVG assinado com o e-mail da conta Google autenticada.
 
-A figura é a tabuada modular no círculo: 240 pontos igualmente espaçados numa circunferência, com cada ponto `i` ligado ao ponto `(k * i) mod 240`, em que `k = número + 1`. O número 1 produz uma cardioide, o 2 uma nefroide, e cada valor gera uma figura diferente.
+## Funcionamento
 
-## Estado inicial
+O login usa Google Identity Services. O navegador envia o número para POST /api/desenho e o ID token no cabeçalho Authorization: Bearer.
 
-Nesta versão tudo acontece no navegador. O arquivo `public/desenho.js` contém a função `gerarDesenho(numero, email)`, e o e-mail é digitado pelo usuário num campo do formulário.
+O servidor verifica o token no Google, confere o público (aud) e a verificação do e-mail. A assinatura é obtida do token validado.
 
-```
-public/
-  index.html    formulário com os campos número e e-mail
-  style.css     aparência da página
-  script.js     lê o formulário e chama gerarDesenho
-  desenho.js    gera o SVG (função pura, sem DOM)
-```
+A geração do SVG ocorre no servidor, usando a implementação original preservada em lib/desenho.js.
 
-## Publicação no Cloudflare Pages
+## Estrutura
 
-Framework preset: `None`. Build command: vazio. Build output directory: `public`.
+- public/: HTML, CSS e JavaScript do navegador.
+- lib/desenho.js: implementação original do desenho.
+- functions/api/desenho.js: validação e geração do SVG.
+- functions/api/config.js: fornece o Client ID público ao navegador.
+- evidencias/exemplo.svg: desenho gerado no site com o número 75.
 
-## Identificação (preencha após o fork)
+## Respostas da API
+
+- 405: método diferente de POST.
+- 400: JSON ou número inválido.
+- 401: autenticação ausente ou inválida.
+- 200: SVG com Content-Type image/svg+xml.
+
+## Publicação
+
+Cloudflare Pages conectado à branch main do GitHub.
+
+Framework preset: None.
+Build command: vazio.
+Build output directory: public.
+
+A variável GOOGLE_CLIENT_ID está configurada no ambiente de produção do Cloudflare.
+
+## Identificação
 
 Nome: Davi Cunha Mayer Vanelli
+
 RA: 2026108175
+
 URL: https://2bim-avalia1-f3r.pages.dev
